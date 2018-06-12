@@ -47,10 +47,8 @@ func Read(f *os.File) []Epos {
 		s := input.Text()
 		if s[0:1] == "#" {    // Reset start time.
 			st = 0
-			if coal != nil {
-				for _, c := range coal {
-					ep = append(ep, c)
-				}
+			for _, c := range coal {
+				ep = append(ep, c)
 			}
 			coal = make([]Epos, 0)
 		} else {
@@ -71,6 +69,9 @@ func Read(f *os.File) []Epos {
 				coal = nil
 			}
 		} 
+	}
+	for _, c := range coal {
+		ep = append(ep, c)
 	}
 	sort.Sort(EposSlice(ep))
 	

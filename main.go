@@ -7,9 +7,13 @@ import (
 )
 
 func run(f *os.File, opts lib.Opts) {
-	data := lib.Read(f)
-	quant := lib.Quantiles(data, opts)
-	lib.Print(quant)
+	if opts.R {
+		lib.PrintRaw(f)
+	} else {
+		data := lib.Read(f)
+		quant := lib.Quantiles(data, opts)
+		lib.PrintQuantiles(quant)
+	}
 }
 
 func main() {

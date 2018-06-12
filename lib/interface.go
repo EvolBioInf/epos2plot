@@ -10,6 +10,7 @@ type Opts struct {
 	L float64
 	U float64
 	V bool
+	R bool
 
 	Files []string
 }
@@ -30,10 +31,13 @@ func version() {
 }
 
 func usage() {
-	fmt.Printf("Usage: %s [options]\n", progStr)
+	fmt.Printf("Usage: %s [options] [files]\n", progStr)
+	fmt.Printf("Convert epos output to quantiles ready for plotting.\n")
+	fmt.Printf("Example: %s foo.epos\n", progStr)
 	fmt.Printf("Options:\n")
 	fmt.Printf("\t[-l NUM lower quantile; default: %.3f]\n", defL)
 	fmt.Printf("\t[-u NUM upper quantile; default: %.3f]\n", defU)
+	fmt.Printf("\t[-r print raw output; default: quantiles]\n")
 	fmt.Printf("\t[-h help]\n")
 	fmt.Printf("\t[-v version]\n")
 	os.Exit(2)
@@ -45,6 +49,7 @@ func ParseCL() Opts {
 	flag.Float64Var(&o.L, "l", defL,  "")
 	flag.Float64Var(&o.U, "u", defU,  "")
 	flag.BoolVar(   &o.V, "v", false, "")
+	flag.BoolVar(   &o.R, "r", false, "")
 	flag.Usage = usage
 	flag.Parse()
 	if o.V == true { version() }

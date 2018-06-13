@@ -1,3 +1,13 @@
+# `epos2plot`
+## Description
+Convert [`epos`](http://github.com/evolbioinf/epos) output to plots.
+## Author
+[Bernhard Haubold](http://thymine.evolbio.mpg.de/), `haubold@evolbio.mpg.de`
+## [Documentation](http://github.com/evolbioinf/epos2plot/tree/master/doc/epos2plot.pdf)
+## License
+[Gnu GLP](https://www.gnu.org/licenses/gpl-3.0.en.html)
+
+
 # `Epos2plot` Converts [`epos`](http://github.com/evolbioinf/epos) Output to Plots
   
 ## Dependencies
@@ -67,4 +77,4 @@ cut -f 1,3 |
 pipePlot
 ```
 ## License
-This software is provided under the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.en.html)
+This software is provided under the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.en.html).

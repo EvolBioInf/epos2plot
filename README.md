@@ -1,4 +1,4 @@
-# `Epos2plot` Converts `epos` Output to Plots
+# `Epos2plot` Converts [`epos`](http://github.com/evolbioinf/epos) Output to Plots
   
 ## Dependencies
 `Epos2plot` is written in Go and requires a working
@@ -12,10 +12,10 @@ go install github.com/evolbioinf/epos2plot
 ```
 
 ## Examples
-The example data is based on Figure 2a of @liu15:exp: The population size
+The example data is based on Figure 2a of [Fu & Li (2015)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4414822/): The population size
 is 10,000 and 10 sequences of length 10Mbp were simulated with 1000
 replications using the coalescent simulator
-[`mspms`](https://pypi.org/project/msprime/) [@kel16:eff]. Its output was
+[`mspms`](https://pypi.org/project/msprime/) [(Kelleher *et al.*, 2016)](https://www.ncbi.nlm.nih.gov/pubmed/27145223). Its output was
 converted to [site frequency spectra](https://en.wikipedia.org/wiki/Allele_frequency_spectrum) using
 [`sfs`](http://github.com/evolbioinf/sfs), and the site frequency
 spectra in turn were converted to population sizes using
@@ -66,4 +66,5 @@ epos2plot |
 cut -f 1,3 |
 pipePlot
 ```
-## References
+## License
+This software is provided under the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.en.html)

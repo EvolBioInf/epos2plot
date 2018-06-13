@@ -1,0 +1,19 @@
+\begin{thebibliography}{2}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Kelleher et~al.(2016)Kelleher, Etheridge, and {McV}ean]{kel16:eff}
+J.~Kelleher, A.~Etheridge, and G.~{McV}ean.
+\newblock Efficient coalesncent simulation and genealogical analysis for large
+  sample sizes.
+\newblock \emph{{PLoS} Comput.}, 12:\penalty0 1--2, 2016.
+
+\bibitem[Liu and Fu(2015)]{liu15:exp}
+X.~Liu and Y.-X. Fu.
+\newblock Exploring population size changes using {SNP} frequency spectra.
+\newblock \emph{Nature Genetics}, 47:\penalty0 555--562, 2015.
+
+\end{thebibliography}

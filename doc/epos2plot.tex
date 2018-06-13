@@ -1,0 +1,97 @@
+\documentclass{article}
+\usepackage{graphics,eurosym,latexsym}
+\usepackage{listings}
+\lstset{columns=fixed,basicstyle=\ttfamily,numbers=left,numberstyle=\tiny,stepnumber=5,breaklines=true}
+\usepackage{times}
+\usepackage[round]{natbib}
+\bibliographystyle{plainnat}
+\oddsidemargin=0cm
+\evensidemargin=0cm
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\I}{\item}
+\newcommand{\ty}{\texttt}
+\newcommand{\kr}{K_{\rm r}}
+\textwidth=16cm
+\textheight=23cm
+\begin{document}
+\title{\ty{epos2plot}: Plot \ty{epos} Results}
+\author{Bernhard Haubold\\\small Max-Planck-Institute for Evolutionary Biology, Pl\"on, Germany}
+\maketitle
+\section{Introduction}
+\ty{Epos2plot} converts \ty{epos} output to a format
+ready for plotting.
+\section{Getting Started}
+\begin{itemize}
+\item Download \ty{epos2plot} or update an existing copy
+  \begin{verbatim}
+go get -u  github.com/evolbioinf/epos2plot
+\end{verbatim}
+\item Install \ty{epos2plot}  
+\begin{verbatim}
+go install github.com/evolbioinf/epos2plot
+\end{verbatim}
+\end{itemize}
+\section{Examples}
+The example data is based on Figure 2a of \cite{liu15:exp}: The population size
+is 10,000 and 10 sequences of length 10Mbp were simulated with 1000
+replications using the coalescent simulator
+\ty{mspms} \citep{kel16:eff}. Its output was
+converted to site frequency spectra using
+\ty{sfs}, and the site frequency
+spectra in turn were converted to population sizes using
+\ty{epos} (both also available from \ty{github.com/evolbioinf}):
+\begin{verbatim}
+for i in $(seq 1000); do
+	mspms 10 1 -t 12310 -r 9750 10000000 -eN 0.066 0.3 | 
+	sfs -f |
+	epos -u 1.2e-1
+done > fig2a_10.epos
+\end{verbatim}
+Copy this data to your working directory
+\begin{verbatim}
+cp $GOPATH/src/github.com/evolbioinf/epos2plot/data/fig2a_10.epos.bz2 .
+\end{verbatim}
+and uncompress it
+\begin{verbatim}
+bunzip fig2a_10.epos.bz2
+\end{verbatim}
+Display the raw data using \ty{pipePlot}
+(see \ty{github.com/evolbioinf}):
+\begin{verbatim}
+epos2plot -r fig2a_10.epos | 
+pipePlot
+\end{verbatim}
+Instead of plotting raw \ty{epos} results, 
+\ty{epos2plot} by default computes 2.5\% and 97.5\% quantiles around the median: 
+\begin{verbatim}
+epos2plot fig2a_10.epos | 
+head
+#Time	LowerQ	Median	UpperQ	SampleSize
+0	9550	10200	18700	987
+463	9550	10200	18700	987
+482	9550	10200	18700	987
+487	9550	10200	18700	987
+491	9550	10200	18700	987
+502	9550	10200	18700	987
+505	9550	10200	18700	987
+506	9550	10200	18700	987
+510	9540	10200	18700	987
+\end{verbatim}
+where \ty{Time} contains the time in generations, 
+\ty{LowerQ} the lower quantile of the population size, \ty{Median} its
+median, and \ty{UpperQ} its upper
+quantile. Notice how these values are close to the expected
+10,000. The column \ty{SampleSize}, finally, lists the number of data points from which the
+quantiles were computed. As one last example, plot the median:
+\begin{verbatim}
+epos2plot fig2a_10.epos | 
+cut -f 1,3 |
+pipePlot
+\end{verbatim}
+
+\bibliography{/home/haubold/References/references}
+\end{document}
+

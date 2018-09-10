@@ -2,6 +2,7 @@ package lib
 
 import (
 	"bufio"
+	"math"
 	"os"
 	"sort"
 	"strconv"
@@ -31,8 +32,9 @@ func (p EposSlice) Less(i, j int) bool { // When tied, let end < start
 	var t1, t2 float64
 	t1 = p[i].T
 	t2 = p[j].T
-	if p[i].S == true { t1++ }
-	if p[j].S == true { t2++ }
+	epsilon := math.Nextafter(1, 2) - 1
+	if p[i].S == true { t1 += epsilon }
+	if p[j].S == true { t2 += epsilon }
 	return t1 < t2
 }
 func (p EposSlice) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }

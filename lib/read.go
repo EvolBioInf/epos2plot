@@ -26,13 +26,13 @@ func newEpos(l int, t, n float64, s bool) *Epos {
 	return e
 }
 
+var epsilon = math.Nextafter(1, 2) - 1
 type EposSlice []Epos
 func (p EposSlice) Len() int           { return len(p) }
 func (p EposSlice) Less(i, j int) bool { // When tied, let end < start
 	var t1, t2 float64
 	t1 = p[i].T
 	t2 = p[j].T
-	epsilon := math.Nextafter(1, 2) - 1
 	if p[i].S == true { t1 += epsilon }
 	if p[j].S == true { t2 += epsilon }
 	return t1 < t2

@@ -63,7 +63,7 @@ func Quantiles(data []Epos, opts Opts) []Quantile {
 		n = strconv.FormatFloat(data[ii].N, 'e', -1, 64)
 		if data[ii].S == true {
 			ps[n]++
-		} else          {
+		} else {
 			ps[n]--
 		}
 	}

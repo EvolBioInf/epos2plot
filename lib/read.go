@@ -43,29 +43,37 @@ func Read(f *os.File) []Epos {
 	var ep []Epos
 	var coal []Epos
 	var st float64  // Start time for interval.
+	var first bool
 
 	input := bufio.NewScanner(f)
+	first = true
 	for input.Scan() {
 		s := input.Text()
 		if s[0:1] == "#" {    // Reset start time.
-			st = 0
-			for _, c := range coal {
-				ep = append(ep, c)
+			if first == true {
+				first = false
+				st = 0
+				for _, c := range coal {
+					ep = append(ep, c)
+				}
+				coal = make([]Epos, 0)
 			}
-			coal = make([]Epos, 0)
 		} else {
+			first = true
 			arr := strings.Split(input.Text(), "\t")
-			l, er := strconv.Atoi(arr[0])
+			l, er := strconv.Atoi(arr[0])           // Read level
 			Check(er)
-			t, er := strconv.ParseFloat(arr[1], 64)
+			t, er := strconv.ParseFloat(arr[1], 64) // Read time
 			Check(er)
-			n, er := strconv.ParseFloat(arr[2], 64)
+			n, er := strconv.ParseFloat(arr[2], 64) // Read population size
 			Check(er)
-			if t > 0 && n > 0  && coal != nil {      // Skip entire coalescent with negative pop sizes
-				e1 := newEpos(l, st, n, true)    // Start at previous time, st.
-				e2 := newEpos(l,  t, n, false)   // End at current time, t.
-				coal = append(coal, *e1)
-				coal = append(coal, *e2)
+			if t >= 0 && n >= 0  && coal != nil {    // Skip entire coalescent with negative pop sizes
+				if st != t {                             // Avoid over-counting due to t=0
+					e1 := newEpos(l, st, n, true)    // Start at previous time, st.
+					e2 := newEpos(l,  t, n, false)   // End at current time, t.
+					coal = append(coal, *e1)
+					coal = append(coal, *e2)
+				}
 				st = t
 			} else {
 				coal = nil

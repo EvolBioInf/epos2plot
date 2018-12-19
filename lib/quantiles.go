@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"sort"
 )
+
 type Quantile struct {
 	T float64  // Time
 	L float64  // Lower quantile
@@ -12,6 +13,8 @@ type Quantile struct {
 	N int      // Sample size
 }
 
+// quant computes the quantiles of the values contained in ps,
+// a map of population sizes and their counts
 func quant(ps map[string]int, opts Opts) (float64, float64, float64, int) {
 	var sizes []float64
 	
@@ -26,8 +29,7 @@ func quant(ps map[string]int, opts Opts) (float64, float64, float64, int) {
 	sort.Float64s(sizes)
 	i1 := int(float64(len(sizes)) * opts.L)
 	i2 := int(float64(len(sizes)) * 0.5)
-	i3 := int(float64(len(sizes)) * opts.U)
-	
+	i3 := int(float64(len(sizes)) * opts.U)	
 	return sizes[i1], sizes[i2], sizes[i3], len(sizes)
 }
 
@@ -46,6 +48,7 @@ func Quantiles(data []Epos, opts Opts) []Quantile {
 	var qu []Quantile
 	var i, ii int
 	var n string
+	var t1, t2 float64
 	ps := make(map[string]int) // Map of population sizes as strings
 
 	// Collect measurements at time zero
@@ -56,10 +59,15 @@ func Quantiles(data []Epos, opts Opts) []Quantile {
 	l, m, u, s := quant(ps, opts)
 	q := newQuantile(0, l, m, u, s)
 	qu = append(qu, *q)
+	t1 = 0
 	for ii = i; ii < len(data); ii++ {
-		l, m, u, s = quant(ps, opts)
-		q = newQuantile(data[ii].T, l, m, u, s)
-		qu = append(qu, *q)
+		t2 = data[ii].T
+		if(t2 - t1 >= opts.T) { // Compute quantiles only if time has changed substantially
+			t1 = t2
+			l, m, u, s = quant(ps, opts)
+			q = newQuantile(data[ii].T, l, m, u, s)
+			qu = append(qu, *q)
+		}
 		n = strconv.FormatFloat(data[ii].N, 'e', -1, 64)
 		if data[ii].S == true {
 			ps[n]++
@@ -67,6 +75,5 @@ func Quantiles(data []Epos, opts Opts) []Quantile {
 			ps[n]--
 		}
 	}
-
 	return qu
 }

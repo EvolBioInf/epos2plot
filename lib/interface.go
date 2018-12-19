@@ -11,7 +11,7 @@ type Opts struct {
 	U float64
 	V bool
 	R bool
-
+	T float64
 	Files []string
 }
 
@@ -20,6 +20,7 @@ const (
 	verStr  = "0.1"
 	defL    = 0.025
 	defU    = 0.975
+	defT    = 100
 )
 
 func version() {
@@ -37,6 +38,7 @@ func usage() {
 	fmt.Printf("Options:\n")
 	fmt.Printf("\t[-l NUM lower quantile; default: %.3f]\n", defL)
 	fmt.Printf("\t[-u NUM upper quantile; default: %.3f]\n", defU)
+	fmt.Printf("\t[-t NUM minimum time step; default: %d]\n", defT)
 	fmt.Printf("\t[-r print raw output; default: quantiles]\n")
 	fmt.Printf("\t[-h help]\n")
 	fmt.Printf("\t[-v version]\n")
@@ -48,6 +50,7 @@ func ParseCL() Opts {
 	
 	flag.Float64Var(&o.L, "l", defL,  "")
 	flag.Float64Var(&o.U, "u", defU,  "")
+	flag.Float64Var(&o.T, "t", defT,  "")
 	flag.BoolVar(   &o.V, "v", false, "")
 	flag.BoolVar(   &o.R, "r", false, "")
 	flag.Usage = usage

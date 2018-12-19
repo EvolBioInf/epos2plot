@@ -2,7 +2,6 @@ package main
 
 import (
 	"os"
-
 	"github.com/evolbioinf/epos2plot/lib"
 )
 

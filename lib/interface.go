@@ -20,7 +20,7 @@ const (
 	verStr  = "0.1"
 	defL    = 0.025
 	defU    = 0.975
-	defT    = 100
+	defT    = 1
 )
 
 func version() {

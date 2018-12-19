@@ -20,7 +20,7 @@ const (
 	verStr  = "0.1"
 	defL    = 0.025
 	defU    = 0.975
-	defT    = 1
+	defT    = 0
 )
 
 func version() {
@@ -38,7 +38,7 @@ func usage() {
 	fmt.Printf("Options:\n")
 	fmt.Printf("\t[-l NUM lower quantile; default: %.3f]\n", defL)
 	fmt.Printf("\t[-u NUM upper quantile; default: %.3f]\n", defU)
-	fmt.Printf("\t[-t NUM minimum time step; default: %d]\n", defT)
+	fmt.Printf("\t[-t NUM minimum time step; default: %d, i.e. use all steps]\n", defT)
 	fmt.Printf("\t[-r print raw output; default: quantiles]\n")
 	fmt.Printf("\t[-h help]\n")
 	fmt.Printf("\t[-v version]\n")

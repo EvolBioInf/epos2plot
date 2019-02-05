@@ -3,15 +3,17 @@ package lib
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"strings"
 	"strconv"
 )
 
-func PrintQuantiles(qu []Quantile) {
+func PrintQuantiles(qu []Quantile, t float64) {
 	fmt.Printf("#Time\tLowerQ\tMedian\tUpperQ\tSampleSize\n")
+	mi := int(math.Round(float64(qu[0].N) * t)) // minimun number of measurements for consideration in output
 	for i, q := range qu {
-		if i == 0 || qu[i].T != qu[i-1].T {
+		if q.N >= mi && (i == 0 || qu[i].T != qu[i-1].T) {
 			fmt.Printf("%g\t%g\t%g\t%g\t%d\n", q.T, q.L, q.M, q.U, q.N)
 		} 
 	}

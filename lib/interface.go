@@ -41,7 +41,7 @@ func usage() {
 	fmt.Printf("\t[-l NUM lower quantile; default: %.3f]\n", defL)
 	fmt.Printf("\t[-u NUM upper quantile; default: %.3f]\n", defU)
 	fmt.Printf("\t[-t NUM minimum time step; default: %d, i.e. use all steps]\n", defT)
-	fmt.Printf("\t[-f NUM minimum fraction of uncoalesced lines; default %.2f]\n", defF)
+	fmt.Printf("\t[-f NUM minimum fraction of uncoalesced samples; default %.2f]\n", defF)
 	fmt.Printf("\t[-r print raw output; default: quantiles]\n")
 	fmt.Printf("\t[-h help]\n")
 	fmt.Printf("\t[-v version]\n")

@@ -10,7 +10,7 @@ import (
 )
 
 func PrintQuantiles(qu []Quantile, t float64) {
-	fmt.Printf("#Time\tLowerQ\tMedian\tUpperQ\tLines\n")
+	fmt.Printf("#Time\tLowerQ\tMedian\tUpperQ\tUncoalescedSamples\n")
 	mi := int(math.Round(float64(qu[0].N) * t)) // minimun number of measurements for consideration in output
 	for i, q := range qu {
 		if q.N >= mi && (i == 0 || qu[i].T != qu[i-1].T) {

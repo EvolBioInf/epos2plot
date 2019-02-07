@@ -62,17 +62,22 @@ func Read(f *os.File) []Epos {
 			first = true
 			arr := strings.Split(input.Text(), "\t")
 			l, er := strconv.Atoi(arr[0])           // Read level
-			Check(er)
 			t, er := strconv.ParseFloat(arr[1], 64) // Read time
 			Check(er)
 			n, er := strconv.ParseFloat(arr[2], 64) // Read population size
 			Check(er)
-			if t >= 0 && n >= 0  && coal != nil {    // Skip entire coalescent with negative pop sizes
+			if t >= 0 && n >= 0  && coal != nil {   // Skip entire coalescent with negative pop sizes
 				if st != t {                             // Avoid over-counting due to t=0
 					e1 := newEpos(l, st, n, true)    // Start at previous time, st.
 					e2 := newEpos(l,  t, n, false)   // End at current time, t.
 					coal = append(coal, *e1)
 					coal = append(coal, *e2)
+					if l == 2 {                      // Extend pop. size beyond TMRCA
+						e1 = newEpos(l, t, n, true)
+						e2 = newEpos(1, math.Inf(1), n, false)
+						coal = append(coal, *e1)
+						coal = append(coal, *e2)
+					}
 				}
 				st = t
 			} else {

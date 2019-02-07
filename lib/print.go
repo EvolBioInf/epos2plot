@@ -9,12 +9,11 @@ import (
 	"strconv"
 )
 
-func PrintQuantiles(qu []Quantile, t float64) {
-	fmt.Printf("#Time\tLowerQ\tMedian\tUpperQ\tUncoalescedSamples\n")
-	mi := int(math.Round(float64(qu[0].N) * t)) // minimun number of measurements for consideration in output
+func PrintQuantiles(qu []Quantile) {
+	fmt.Printf("#Time\tLowerQ\tMedian\tUpperQ\n")
 	for i, q := range qu {
-		if q.N >= mi && (i == 0 || qu[i].T != qu[i-1].T) {
-			fmt.Printf("%g\t%g\t%g\t%g\t%d\n", q.T, q.L, q.M, q.U, q.N)
+		if q.T < math.Inf(1) && (i == 0 || qu[i].T != qu[i-1].T) {
+			fmt.Printf("%g\t%g\t%g\t%g\n", q.T, q.L, q.M, q.U)
 		} 
 	}
 }

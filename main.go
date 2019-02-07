@@ -11,7 +11,7 @@ func run(f *os.File, opts lib.Opts) {
 	} else {
 		data := lib.Read(f)
 		quant := lib.Quantiles(data, opts)
-		lib.PrintQuantiles(quant, opts.F)
+		lib.PrintQuantiles(quant)
 	}
 }
 

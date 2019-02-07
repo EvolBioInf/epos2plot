@@ -62,7 +62,7 @@ func Quantiles(data []Epos, opts Opts) []Quantile {
 	t1 = 0
 	for ii = i; ii < len(data); ii++ {
 		t2 = data[ii].T
-		if(t2 - t1 >= opts.T) { // Compute quantiles only if time has changed substantially
+		if(t2 - t1 >= opts.T) { // Compute quantiles only if time has changed by at least some threshold
 			t1 = t2
 			l, m, u, s = quant(ps, opts)
 			q = newQuantile(data[ii].T, l, m, u, s)

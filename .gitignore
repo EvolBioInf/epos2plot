@@ -5,6 +5,9 @@ epos2plot
 *.blg
 *.dvi
 *.log
-*.tex
 *.sh
 *.out
+doc/fig2a.eps
+doc/fig2a.tex
+epos2plot.pdf
+epos2plot.ps

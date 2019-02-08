@@ -19,29 +19,37 @@ func PrintQuantiles(qu []Quantile) {
 }
 
 func PrintRaw(f *os.File) {
-	var st float64  // Start time for interval.
+	var st, et float64  // Start and end times for interval.
 	var first bool
+	var pn, cn float64 // previous and current population size
+	var er error
 	input := bufio.NewScanner(f)
+	first = true
 	for input.Scan() {
 		s := input.Text()
 		if s[0:1] == "#" {    // Reset start time.
 			st = 0
+			if !first {
+				fmt.Printf("%g\t%g\n", et, cn)
+			}
 			first = true
 		} else {
 			arr := strings.Split(input.Text(), "\t")
-			t, er := strconv.ParseFloat(arr[1], 64)
+			et, er = strconv.ParseFloat(arr[1], 64) // Get time for end of interval.
 			Check(er)
-			n, er := strconv.ParseFloat(arr[2], 64)
+			cn, er = strconv.ParseFloat(arr[2], 64) // Get population size.
 			Check(er)
-			if st > 0 && t > 0 && n > 0 {                      // Skip negative population sizes.
+			if st > 0 && et > 0 {
 				if first {
 					first = false
-					fmt.Printf("\n")
+					fmt.Printf("\n%g\t%g\n", 0., pn)
 				}
-				fmt.Printf("%g\t%g\n", st, n)
-				fmt.Printf("%g\t%g\n", t,  n)
+				fmt.Printf("%g\t%g\n", st, pn)
+				fmt.Printf("%g\t%g\n", st, cn)
 			}
-			st = t
-		} 
+			st = et
+			pn = cn
+		}
 	}
+	fmt.Printf("%g\t%g\n", et, cn)
 }

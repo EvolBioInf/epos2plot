@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"os"
+	"strings"
+
 	"github.com/evolbioinf/epos2plot/lib"
 )
 
@@ -14,10 +17,11 @@ func run(f *os.File, opts lib.Opts) {
 		lib.PrintQuantiles(quant)
 	}
 }
-
+var VERSION, DATE string
 func main() {
 	opts := lib.ParseCL()
-
+	DATE = strings.Replace(DATE, "_", " ", -1)
+	fmt.Printf("VERSION: %s; DATE: %s\n", VERSION, DATE)
 	if len(opts.Files) == 0 {
 		run(os.Stdin, opts)
 	} else {

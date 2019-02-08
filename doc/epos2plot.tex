@@ -31,8 +31,8 @@
 \section{Introduction}
 \ty{Epos2plot} summarizes multiple
 \href{http://github.com/evolbioinf/epos}{\ty{epos}} results into
-quantile plots. Figure~\ref{fig:qua} shows quantiles
-computed by \ty{epos2plot} from 1000 \ty{epos} results, which in turn
+quantile plots. Figure~\ref{fig:qua} shows such a quantile plot 
+computed from 1000 \ty{epos} \citep{lyn19:inf} results, which in turn
 were computed from 1000 haplotype samples simulated
 from the simplest population model, constant size. In the following
 sections I first explain how to set up \ty{epos2plot} and then give a
@@ -42,48 +42,64 @@ tutorial-style introduction to its usage.
   \begin{center}
     \scalebox{0.6}{\input{fig2a}}
   \end{center}
-  \caption{Population size estimation using \ty{epos} followed by
-    \ty{epos2plot}; see text for details.}\label{fig:qua}
+  \caption{Population size estimation using \ty{epos} on 1000 samples
+    of size 30 drawn from a population of 10,000, followed by
+    \ty{epos2plot}.}\label{fig:qua}
 \end{figure}
 
 \section{Getting Started}
-\ty{Epos2plot} is written in Go, so assuming a working Go
-installation, you can get the program, or update an existing copy
+\ty{Epos2plot} is written in Go and distributed under Git.
+\begin{itemize}
+\item Obtain the program
 \begin{verbatim}
-go get -u github.com/evolbioinf/epos2plot
+git clone https://github.com/evolbioinf/epos2plot
 \end{verbatim}
-and install it
+\item Change into the new directory
 \begin{verbatim}
-go install github.com/evolbioinf/epos2plot
+cd epos2plot
 \end{verbatim}
+\item Make
+\begin{verbatim}
+make
+\end{verbatim}
+\item Test
+\begin{verbatim}
+make test
+\end{verbatim}
+\item Install
+\begin{verbatim}
+make install
+\end{verbatim}
+\item The documentation is typeset in \LaTeX{}. Make the documentation
+\begin{verbatim}
+make doc
+\end{verbatim}
+The manual is now in \ty{doc/epos2plot.pdf}.
+\end{itemize}
 
 \section{Tutorial}
 The example data displayed in Figure~\ref{fig:qua} is based on a
-population of size 10,000, from which 1000 samples of 30 haplotypes are
-drawn, each haplotype 10Mbp long \citep[Figure 2a]{liu15:exp}. The
-data was simulated using the command
+scenario taken from \citep[Figure 2a]{liu15:exp}: Assume a population
+of constant size 10,000 individuals and draw 1000 samples of 30
+haplotypes, each consisting of 10 Mbp. Such data can be simulated using
 \begin{verbatim}
 mspms 30 1000 -t 4800 -r 3800 1e7 |
 ms2sfs                            |
 epos -l 1e7 -U -u 1.2e-8 > example.epos
 \end{verbatim}
-The output of the fast coalescent simulator \citep{kel16:eff} is
+The output of the fast coalescent simulator \ty{mspms} \citep{kel16:eff} is
 converted to site frequency spectra by
-\ty{ms2sfs}\footnote{https://github.com/evolbioinf/sfs/}. \ty{Epos}\footnote{https://github.com/evolbioinf/epos/},
+\ty{ms2sfs}\footnote{\ty{https://github.com/evolbioinf/sfs/}}. \ty{Epos}\footnote{\ty{https://github.com/evolbioinf/epos/}},
 finally, estimates population sizes from these spectra.
 \begin{itemize}
-\item Copy this data to your working directory
+\item Uncompress the example data
 \begin{verbatim}
-cp $GOPATH/src/github.com/evolbioinf/epos2plot/data/example.epos.bz2 .
-\end{verbatim}
-\item Uncompress it
-\begin{verbatim}
-bunzip example.epos.bz2
+bunzip data/example.epos.bz2
 \end{verbatim}
 \item Look at the first sample, which happens to occupy 11 lines in
   the uncompressed data file:
 \begin{verbatim}
-head -n 11 example.epos 
+head -n 11 data/example.epos 
 #InputFile:	stdin
 #Polymorphic sites surveyed:	19114
 #Monomorphic sites surveyed:	9980886
@@ -96,25 +112,26 @@ head -n 11 example.epos
 3	1.85e+04	9.90e+03
 2	3.94e+04	1.05e+04
 \end{verbatim}
-The part that concerns us here are the two lines at the bottom without
-leading hashes. We read them from the bottom up, which means going
+The part that concerns us here are the two lines without
+leading hashes at the bottom. We read them from the bottom up, which means going
 from the past toward the present. ``Level'' 2, the root of the
 coalescent, is located 39,400 generations in the past, at
 which point the population size, $N$, was 10,500 individuals. This
 size stayed constant until generation 18,500 in the past,
 when $N=9900$, which remained unchanged until the present.
 
-\item Extract this raw data just described
+\item Instead of reading the data upside down, as we have just done,
+  it is easier to extract it automatically into two columns, time and size
 \begin{verbatim}
-head -n 11 example.epos | epos2plot -r
-0	9900
-18500	9900
-18500	10500
-39400	10500
+head -n 11 data/example.epos | epos2plot -r
+0       9900
+18500   9900
+18500   10500
+39400   10500
 \end{verbatim}
-\item Display the raw data  using \ty{pipePlot}\footnote{\ty{http://github.com/evolbioinf/pipeplot}}
+\item and plot it using \ty{pipePlot}\footnote{\ty{http://github.com/evolbioinf/pipeplot}}
 \begin{verbatim}
-head -n 11 example.epos | 
+head -n 11 data/example.epos | 
 epos2plot -r            | 
 pipePlot -x "Time (generations)" -y N -X 0:45000 -Y 9000:11000
 \end{verbatim}
@@ -127,9 +144,9 @@ to get Figure~\ref{fig:sin}.
 \caption{Plot of single demography.}\label{fig:sin}
 \end{figure}
 
-\item Plot all 1000 demographies
+\item Plot all 1000 demographies in the example data set
 \begin{verbatim}
-epos2plot -r example.epos |
+epos2plot -r data/example.epos |
 pipePlot -x "Time (generations)" -y N
 \end{verbatim}
 to get Figure~\ref{fig:all}.
@@ -137,7 +154,8 @@ to get Figure~\ref{fig:all}.
 \item Notice the ragged right hand side of Figure~\ref{fig:all} due to
   samples coalescing at different points in time. This leads to a
   fundamental problem with our analysis: The expected time for a
-  sample of $n$ haplotypes to reach its most recent common ancestor is
+  sample of $n$ haplotypes to reach its most recent common ancestor,
+  $E[T_{\rm MRCA}]$,  is
   proportional to the population size \cite[p. 76]{wak09:coa}:
 \[
 E[T_{\rm MRCA}]=4N\left(1-\frac{1}{n}\right).
@@ -146,7 +164,7 @@ As we move from the present into the past, samples successively find
 their most recent common ancestor, and might be expected to drop out
 of the quantile computation. However, this would lead to a strong
 upward bias in the results, as only samples that induce large
-population size estimates endure into the distant past. To avoid this
+population size estimates endure into the more distant past. To avoid this
 bias, \ty{epos} by default, i. e. without \ty{-r}, extends the
 population size measured at the most recent common ancestor of each
 sample into the past until the last sample has coalesced.
@@ -163,24 +181,49 @@ sample into the past until the last sample has coalesced.
   summarizes them by computing 2.5\% and 97.5\% quantiles around the
   median:
 \begin{verbatim}
-epos2plot example.epos | head
+epos2plot data/example.epos | head
 #Time	LowerQ	Median	UpperQ
-0	9550	10200	18700
-463	9550	10200	18700
-482	9550	10200	18700
-487	9550	10200	18700
-491	9550	10200	18700
-502	9550	10200	18700
-505	9550	10200	18700
-506	9550	10200	18700
-510	9540	10200	18700
+0	1	10000	83900
+0.0046	1	10000	83900
+0.00952	1	10000	83900
+0.0148	283	10100	83900
+0.0205	469	10100	83900
+0.0267	558	10100	83900
+0.0485	574	10100	83900
+0.166	577	10100	84300
+1.04	639	10100	84300
 \end{verbatim}
 where \ty{Time} contains the time in generations, \ty{LowerQ} the
 lower quantile of the population size, \ty{Median} its median, and
-\ty{UpperQ} its upper quantile. We already looked at
-Figure~\ref{fig:qua}, which is a plot of these values. It illustrates
-the excellent fit between the predicted and the expected population
-size.
+\ty{UpperQ} its upper quantile.
+
+\item In case you are wondering about time points like 0.0046
+  generations, they result from very early coalescent events and make
+  little biological sense. \ty{Epos2plot} allows the user to choose a
+  minimum step length between the data points it prints using the
+  \ty{-t} option. By default this is 0, but if we now set it to 1, we
+  get
+\begin{verbatim}
+epos2plot -t 1 | head
+#Time	LowerQ	Median	UpperQ
+0	1	10000	83900
+1.04	639	10100	84300
+2.08	917	10100	85400
+3.22	1270	10100	85400
+4.47	1510	10100	85400
+6.09	1680	10100	85400
+7.72	1720	10100	85400
+8.91	2040	10100	85400
+10.2	2320	10100	85400
+\end{verbatim}
+Notice how the last time point printed in the previous example is now
+the fist time point after zero. The \ty{-t} option is particularly
+useful with very large samples of \ty{epos} results, where the number
+of data points close to the zero line can be so large as to bog down
+the \ty{epos2plot} run.  In any case, the plot of these values is
+Figure~\ref{fig:qua}, which we already looked at in the
+Introduction. It illustrates the excellent fit between the predicted
+and the expected population size.
 \end{itemize}
 
 \bibliography{ref}

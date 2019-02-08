@@ -5,11 +5,11 @@ epos2plot
 *.blg
 *.dvi
 *.log
-*.out
 version.tex
 date.tex
 genFig.sh
 doc/fig2a.eps
 doc/fig2a.tex
+doc/epos2plot.out
 epos2plot.pdf
 epos2plot.ps

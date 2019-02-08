@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 )
-
+var VERSION, DATE string
 type Opts struct {
 	L float64
 	U float64
@@ -17,14 +17,13 @@ type Opts struct {
 
 const (
 	progStr = "epos2plot"
-	verStr  = "0.2"
 	defL    = 0.025
 	defU    = 0.975
 	defT    = 0
 )
 
-func version() {
-	fmt.Printf("%s %s\n", progStr, verStr)
+func version(date, ver string) {
+	fmt.Printf("%s %s, %s\n", progStr, ver, date)
 	fmt.Printf("Written by Bernhard Haubold\n")
 	fmt.Printf("Distributed under the GNU General Public License\n")
 	fmt.Printf("Please send bug reports to haubold@evolbio.mpg.de.\n")
@@ -45,7 +44,7 @@ func usage() {
 	os.Exit(2)
 }
 
-func ParseCL() Opts {
+func ParseCL(date, ver string) Opts {
 	var o Opts
 	
 	flag.Float64Var(&o.L, "l", defL,  "")
@@ -55,7 +54,7 @@ func ParseCL() Opts {
 	flag.BoolVar(   &o.R, "r", false, "")
 	flag.Usage = usage
 	flag.Parse()
-	if o.V == true { version() }
+	if o.V == true { version(date, ver) }
 	o.Files = flag.Args()
 	
 	return o

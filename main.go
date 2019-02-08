@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -19,9 +18,8 @@ func run(f *os.File, opts lib.Opts) {
 }
 var VERSION, DATE string
 func main() {
-	opts := lib.ParseCL()
-	DATE = strings.Replace(DATE, "_", " ", -1)
-	fmt.Printf("VERSION: %s; DATE: %s\n", VERSION, DATE)
+	date := strings.Replace(DATE, "_", " ", -1)
+	opts := lib.ParseCL(date, VERSION)
 	if len(opts.Files) == 0 {
 		run(os.Stdin, opts)
 	} else {

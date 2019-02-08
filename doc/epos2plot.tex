@@ -6,6 +6,7 @@
 \usepackage{times}
 \usepackage[round]{natbib}
 \usepackage{hyperref}
+\usepackage[useregional]{datetime2}
 \bibliographystyle{plainnat}
 \oddsidemargin=0cm
 \evensidemargin=0cm
@@ -22,8 +23,10 @@
 \textwidth=16cm
 \textheight=23cm
 \begin{document}
-\title{\ty{epos2plot}: Plot \href{http://github.com/evolbioinf/epos}{\ty{epos}} Results}
-\author{Bernhard Haubold\\\small Max-Planck-Institute for Evolutionary Biology, Pl\"on, Germany}
+\title{\ty{Epos2plot} \input{version}: Plot \href{http://github.com/evolbioinf/epos}{\ty{epos}} Results}
+\author{Bernhard Haubold\\\small Max-Planck-Institute for Evolutionary
+  Biology, Pl\"on, Germany}
+\date{\input{date}}
 \maketitle
 \section{Introduction}
 \ty{Epos2plot} summarizes multiple
@@ -42,25 +45,6 @@ tutorial-style introduction to its usage.
   \caption{Population size estimation using \ty{epos} followed by
     \ty{epos2plot}; see text for details.}\label{fig:qua}
 \end{figure}
-
-
-The x-axis goes from the
-present into the past, and in this movement lies a fundamental problem
-of this type of analysis: The expected time for a sample of $n$
-haplotypes to reach its most recent common ancestor is proportional to
-the population size \cite[p. 76]{wak09:coa}:
-\[
-E[T_{\rm MRCA}]=4N\left(1-\frac{1}{n}\right).
-\]
-Now, as we move from the present into the past, samples successively
-find their most recent common ancestor, and might be expected to drop
-out of the quantile computation. However, this would lead to a strong
-upward bias in the results, as only samples that induce large
-population size estimates endure into the distant past. Instead,
-\ty{epos} extends the population size measured at the most recent
-common ancestor of each sample into the past until the last sample has
-coalesced.
-
 
 \section{Getting Started}
 \ty{Epos2plot} is written in Go, so assuming a working Go
@@ -115,20 +99,69 @@ head -n 11 example.epos
 The part that concerns us here are the two lines at the bottom without
 leading hashes. We read them from the bottom up, which means going
 from the past toward the present. ``Level'' 2, the root of the
-coalescent, is located $3.94\times 10^4$ generations in the past, at
+coalescent, is located 39,400 generations in the past, at
 which point the population size, $N$, was 10,500 individuals. This
-size stayed constant until generation $1.84\times 10^4$ in the past,
+size stayed constant until generation 18,500 in the past,
 when $N=9900$, which remained unchanged until the present.
 
-\item Display the raw data of this sample using \ty{pipePlot}\footnote{\ty{http://github.com/evolbioinf/pipeplot}}
+\item Extract this raw data just described
+\begin{verbatim}
+head -n 11 example.epos | epos2plot -r
+0	9900
+18500	9900
+18500	10500
+39400	10500
+\end{verbatim}
+\item Display the raw data  using \ty{pipePlot}\footnote{\ty{http://github.com/evolbioinf/pipeplot}}
+\begin{verbatim}
+head -n 11 example.epos | 
+epos2plot -r            | 
+pipePlot -x "Time (generations)" -y N -X 0:45000 -Y 9000:11000
+\end{verbatim}
+to get Figure~\ref{fig:sin}.
 
-\item Display the raw data using {\ty{pipePlot}}:
+\begin{figure}
+\begin{center}
+\scalebox{0.6}{\includegraphics{single.ps}}
+\end{center}
+\caption{Plot of single demography.}\label{fig:sin}
+\end{figure}
+
+\item Plot all 1000 demographies
 \begin{verbatim}
 epos2plot -r example.epos |
 pipePlot -x "Time (generations)" -y N
 \end{verbatim}
-Instead of plotting raw epos results, \ty{epos2plot} by default
-computes 2.5\% and 97.5\% quantiles around the median:
+to get Figure~\ref{fig:all}.
+
+\item Notice the ragged right hand side of Figure~\ref{fig:all} due to
+  samples coalescing at different points in time. This leads to a
+  fundamental problem with our analysis: The expected time for a
+  sample of $n$ haplotypes to reach its most recent common ancestor is
+  proportional to the population size \cite[p. 76]{wak09:coa}:
+\[
+E[T_{\rm MRCA}]=4N\left(1-\frac{1}{n}\right).
+\]
+As we move from the present into the past, samples successively find
+their most recent common ancestor, and might be expected to drop out
+of the quantile computation. However, this would lead to a strong
+upward bias in the results, as only samples that induce large
+population size estimates endure into the distant past. To avoid this
+bias, \ty{epos} by default, i. e. without \ty{-r}, extends the
+population size measured at the most recent common ancestor of each
+sample into the past until the last sample has coalesced.
+
+
+\begin{figure}
+\begin{center}
+\scalebox{0.6}{\includegraphics{all.ps}}
+\end{center}
+\caption{Plot of all demographies in the example data.}\label{fig:all}
+\end{figure}
+
+\item  Instead of plotting raw demographies, \ty{epos2plot} by default
+  summarizes them by computing 2.5\% and 97.5\% quantiles around the
+  median:
 \begin{verbatim}
 epos2plot example.epos | head
 #Time	LowerQ	Median	UpperQ
@@ -144,14 +177,12 @@ epos2plot example.epos | head
 \end{verbatim}
 where \ty{Time} contains the time in generations, \ty{LowerQ} the
 lower quantile of the population size, \ty{Median} its median, and
-\ty{UpperQ} its upper quantile. Notice how these values are close to
-the expected 10,000. As one last example, plot the median:
-\begin{verbatim}
-epos2plot example.epos |
-cut -f 1,3 |
-pipePlot
-\end{verbatim}
+\ty{UpperQ} its upper quantile. We already looked at
+Figure~\ref{fig:qua}, which is a plot of these values. It illustrates
+the excellent fit between the predicted and the expected population
+size.
 \end{itemize}
+
 \bibliography{ref}
 \end{document}
 

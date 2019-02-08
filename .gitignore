@@ -5,8 +5,10 @@ epos2plot
 *.blg
 *.dvi
 *.log
-*.sh
 *.out
+version.tex
+date.tex
+genFig.sh
 doc/fig2a.eps
 doc/fig2a.tex
 epos2plot.pdf

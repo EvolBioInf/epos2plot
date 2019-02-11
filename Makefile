@@ -6,6 +6,8 @@ install:
 	go install -ldflags "-X main.VERSION=${VERSION} -X main.DATE=${DATE}"
 test:
 	bash ./scripts/test.sh
+clean:
+	rm epos2plot
 .PHONY:	doc
 doc:	
 	make -C doc

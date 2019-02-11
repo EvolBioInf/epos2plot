@@ -1,4 +1,4 @@
-export VERSION = $(shell bash ./scripts/version.sh)
+export VERSION = $(shell bash ./scripts/version.sh) 
 export DATE    = $(shell bash ./scripts/date.sh)
 all:
 	go build -ldflags "-X main.VERSION=${VERSION} -X main.DATE=${DATE}"

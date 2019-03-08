@@ -4,31 +4,31 @@ import (
 	"os"
 	"strings"
 
-	"github.com/evolbioinf/epos2plot/lib"
+	"github.com/evolbioinf/epos2plot/plot"
 )
 
-func run(f *os.File, opts lib.Opts) {
+func run(f *os.File, opts plot.Opts) {
 	if opts.R {
-		lib.PrintRaw(f)
+		plot.PrintRaw(f)
 	} else {
-		data := lib.Read(f)
-		quant := lib.Quantiles(data, opts)
-		lib.PrintQuantiles(quant)
+		data := plot.Read(f)
+		quant := plot.Quantiles(data, opts)
+		plot.PrintQuantiles(quant)
 	}
 }
 var VERSION, DATE string
 func main() {
 	date := strings.Replace(DATE, "_", " ", -1)
-	opts := lib.ParseCL(date, VERSION)
+	opts := plot.ParseCL(date, VERSION)
 	if len(opts.Files) == 0 {
 		run(os.Stdin, opts)
 	} else {
 		for _, f := range opts.Files {
 			fi, err := os.Open(f)
-			lib.Check(err)
+			plot.Check(err)
 			run(fi, opts)
 			err = fi.Close()
-			lib.Check(err)
+			plot.Check(err)
 		}
 	}
 }

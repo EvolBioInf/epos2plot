@@ -29,14 +29,20 @@
 \date{\input{date}}
 \maketitle
 \section{Introduction}
+The package \ty{epos2plot} contains two programs: \ty{epos2plot}
+itself and \ty{sumPlot}. 
 \ty{Epos2plot} summarizes multiple
 \href{http://github.com/evolbioinf/epos}{\ty{epos}} results into
 quantile plots. Figure~\ref{fig:qua} shows such a quantile plot 
 computed from 1000 \ty{epos} \citep{lyn19:inf} results, which in turn
 were computed from 1000 haplotype samples simulated
-from the simplest population model, constant size. In the following
-sections I first explain how to set up \ty{epos2plot} and then give a
-tutorial-style introduction to its usage.
+from the simplest population model, constant size. \ty{SumPlot}
+summarizes multiple data \ty{epos2plot} data sets by computing their
+mean and standard deviation or standard error.
+
+In the following sections I first explain how to set up \ty{epos2plot}
+and then give a tutorial-style introduction to the usage of
+\ty{epos2plot} and \ty{sumPlot}
 
 \begin{figure}
   \begin{center}
@@ -78,6 +84,7 @@ The manual is now in \ty{doc/epos2plot.pdf}.
 \end{itemize}
 
 \section{Tutorial}
+\subsection{\ty{epos2plot}}
 The example data displayed in Figure~\ref{fig:qua} is based on a
 scenario taken from \citep[Figure 2a]{liu15:exp}: Assume a population
 of constant size 10,000 individuals and draw 1000 samples of 30
@@ -225,6 +232,27 @@ Figure~\ref{fig:qua}, which we already looked at in the
 Introduction. It illustrates the excellent fit between the predicted
 and the expected population size.
 \end{itemize}
+\subsection{\ty{sumPlot}}
+Often several samples are taken from a given population. For example,
+Figure~\ref{fig:chq}A shows the medians of eight bootstrapted samples
+drawn from the Chq population of \textit{Daphnia
+  pulex}. Figure~\ref{fig:chq}B summarizes these curves as
+mean$\pm$SEM.
+
+\begin{figure}
+  \begin{center}
+    \resizebox{\textwidth}{!}{
+      \begin{tabular}{cc}
+        \textbf{A} & \textbf{B}\\
+        \input{chq2} & \input{chq3}
+      \end{tabular}
+    }
+  \end{center}
+  \caption{Medians of eight bootstrapped runs of \ty{epos2plot} on the
+    Chq population of \textit{D. pulex} (\textbf{A}), mean$\pm$SEM of
+    that plot.}\label{fig:chq}
+\end{figure}
+
 
 \bibliography{ref}
 \end{document}

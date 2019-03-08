@@ -13,7 +13,7 @@ func run(f *os.File, opts sum.Opts) {
 	var i int
 	rd := sum.Read(f)
 	fd := sum.Analysis(rd, opts)
-	fmt.Printf("#Pos\tMean\t")
+	fmt.Printf("#Time\tMean\t")
 	if opts.E  {
 		fmt.Printf("SEM\n")
 	} else {

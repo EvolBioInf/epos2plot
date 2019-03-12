@@ -1,7 +1,9 @@
 package sum
 
 import (
+	"fmt"
 	"math"
+	"os"
 )
 
 type Row []float64
@@ -39,6 +41,16 @@ func ms(d []float64, opts Opts) (float64, float64) {
 	return m, e
 }
 
+func printMat(data []Row) {
+	for i := 0; i < len(data); i++ {
+		fmt.Printf("%.2f", data[i][0])
+		for j := 1; j < len(data[i]); j++ {
+			fmt.Printf("\t%.2f", data[i][j])
+		}
+		fmt.Printf("\n")
+	}
+}
+
 func Analysis(ds DataSlice, opts Opts) Result {
 	var n, m int
 
@@ -73,6 +85,10 @@ func Analysis(ds DataSlice, opts Opts) Result {
 				dm[j][i] = dm[j - 1][i]
 			}
 		}
+	}
+	if opts.M {
+		printMat(dm)
+		os.Exit(0)
 	}
 	// calculate means & standard errors
 	for i := 0; i < m; i++ {

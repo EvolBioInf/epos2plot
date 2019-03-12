@@ -9,6 +9,7 @@ var VERSION, DATE string
 type Opts struct {
 	V bool
 	E bool
+	M bool
 	Files []string
 }
 
@@ -30,6 +31,7 @@ func usage() {
 	fmt.Printf("Example: epos2plot *.epos | %s\n", progStr)
 	fmt.Printf("Options:\n")
 	fmt.Printf("\t[-e standard error of the mean; default: standard deviation]\n")
+	fmt.Printf("\t[-m print matrix from which means & errors are computed and exit]\n")
 	fmt.Printf("\t[-h help]\n")
 	fmt.Printf("\t[-v version]\n")
 	os.Exit(2)
@@ -40,6 +42,7 @@ func ParseCL(date, ver string) Opts {
 	
 	flag.BoolVar(&o.V, "v", false, "")
 	flag.BoolVar(&o.E, "e", false, "")
+	flag.BoolVar(&o.M, "m", false, "")
 	flag.Usage = usage
 	flag.Parse()
 	if o.V == true { version(date, ver) }

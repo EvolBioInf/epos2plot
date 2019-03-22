@@ -1,4 +1,4 @@
-bzcat ./data/example.epos.bz2 | ./cmd/epos2plot -r > tmp.out
+bzcat ./data/example.epos.bz2 | ./cmd/epos2plot/epos2plot -r > tmp.out
 DIFF=$(diff tmp.out data/exampleR.out)
 if [ "$DIFF" == "" ] 
 then
@@ -8,7 +8,7 @@ else
     echo ${DIFF}
 fi
 
-bzcat ./data/example.epos.bz2 | ./cmd/epos2plot > tmp.out
+bzcat ./data/example.epos.bz2 | ./cmd/epos2plot/epos2plot > tmp.out
 DIFF=$(diff tmp.out data/exampleQ.out)
 if [ "$DIFF" == "" ] 
 then
@@ -18,7 +18,7 @@ else
     echo ${DIFF}
 fi
 
-bzcat ./data/example.epos.bz2 | ./cmd/epos2plot -t 1 > tmp.out
+bzcat ./data/example.epos.bz2 | ./cmd/epos2plot/epos2plot -t 1 > tmp.out
 DIFF=$(diff tmp.out data/exampleQ1.out)
 if [ "$DIFF" == "" ] 
 then

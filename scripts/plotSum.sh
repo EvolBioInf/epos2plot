@@ -1,4 +1,4 @@
-./cmd/plotSum data/chq.dat > tmp.out
+./cmd/plotSum/plotSum data/chq.dat > tmp.out
 DIFF=$(diff tmp.out data/chq.out)
 if [ "$DIFF" == "" ] 
 then
@@ -8,7 +8,7 @@ else
     echo ${DIFF}
 fi
 
-./cmd/plotSum -e data/chq.dat > tmp.out
+./cmd/plotSum/plotSum -e data/chq.dat > tmp.out
 DIFF=$(diff tmp.out data/chqE.out)
 if [ "$DIFF" == "" ] 
 then

@@ -41,10 +41,15 @@ func ms(d []float64, opts Opts) (float64, float64) {
 	return m, e
 }
 
-func printMat(data []Row) {
+func printMat(data []Row, res *Result) {
+	fmt.Printf("#Time")
+	for i := 0; i < len(data[i]); i++ {
+		fmt.Printf("\tR%d", i + 1)
+	}
+	fmt.Printf("\n")
 	for i := 0; i < len(data); i++ {
-		fmt.Printf("%.2f", data[i][0])
-		for j := 1; j < len(data[i]); j++ {
+		fmt.Printf("%g", res.T[i])
+		for j := 0; j < len(data[i]); j++ {
 			fmt.Printf("\t%.2f", data[i][j])
 		}
 		fmt.Printf("\n")
@@ -87,7 +92,7 @@ func Analysis(ds DataSlice, opts Opts) Result {
 		}
 	}
 	if opts.M {
-		printMat(dm)
+		printMat(dm, r)
 		os.Exit(0)
 	}
 	// calculate means & standard errors

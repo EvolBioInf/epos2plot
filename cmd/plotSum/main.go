@@ -22,7 +22,7 @@ func run(f *os.File, opts sum.Opts) {
 	fmt.Printf("%.0f\t%.2f\t%.2f\n", fd.T[0], fd.M[0], fd.S[0])
 	for i = 1; i < len(fd.T) - 1; i++ {
 		if fd.M[i] != fd.M[i-1] {
-			fmt.Printf("%.0f\t%.2f\t%.2f\n", fd.T[i], fd.M[i], fd.S[i])
+			fmt.Printf("%g\t%.2f\t%.2f\n", fd.T[i], fd.M[i], fd.S[i])
 		}
 	}
 	fmt.Printf("%.0f\t%.2f\t%.2f\n", fd.T[i], fd.M[i], fd.S[i])

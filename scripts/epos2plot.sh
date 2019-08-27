@@ -1,3 +1,5 @@
+wget -q guanine.evolbio.mpg.de/epos2plot/example.epos.bz2
+mv ./example.epos.bz2 ./data/
 bzcat ./data/example.epos.bz2 | ./cmd/epos2plot/epos2plot -r > tmp.out
 DIFF=$(diff tmp.out data/exampleR.out)
 if [ "$DIFF" == "" ] 
@@ -29,3 +31,4 @@ else
 fi
 
 rm tmp.out
+rm data/example.epos.bz2

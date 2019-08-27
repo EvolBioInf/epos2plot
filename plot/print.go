@@ -11,10 +11,17 @@ import (
 
 func PrintQuantiles(qu []Quantile) {
 	fmt.Printf("#Time\tLowerQ\tMedian\tUpperQ\n")
+	var pt float64 // Previous values
+	var np = 0
 	for i, q := range qu {
 		if q.T < math.Inf(1) && (i == 0 || qu[i].T != qu[i-1].T) {
+			np++
+			if np > 2 {
+				fmt.Printf("%g\t%g\t%g\t%g\n", pt, q.L, q.M, q.U)
+			} 
 			fmt.Printf("%g\t%g\t%g\t%g\n", q.T, q.L, q.M, q.U)
-		} 
+			pt = q.T
+		}
 	}
 }
 

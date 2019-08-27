@@ -30,19 +30,19 @@
 \maketitle
 \section{Introduction}
 The package \ty{epos2plot} contains two programs: \ty{epos2plot}
-itself and \ty{sumPlot}. 
+itself and \ty{plotSum}. 
 \ty{Epos2plot} summarizes multiple
 \href{http://github.com/evolbioinf/epos}{\ty{epos}} results into
 quantile plots. Figure~\ref{fig:qua} shows such a quantile plot 
 computed from 1000 \ty{epos} \citep{lyn19:inf} results, which in turn
 were computed from 1000 haplotype samples simulated
-from the simplest population model, constant size. \ty{SumPlot}
+from the simplest population model, constant size. \ty{PlotSum}
 summarizes multiple data \ty{epos2plot} data sets by computing their
 mean and standard deviation or standard error.
 
 In the following sections I first explain how to set up \ty{epos2plot}
 and then give a tutorial-style introduction to the usage of
-\ty{epos2plot} and \ty{sumPlot}
+\ty{epos2plot} and \ty{plotSum}
 
 \begin{figure}
   \begin{center}
@@ -54,7 +54,7 @@ and then give a tutorial-style introduction to the usage of
 \end{figure}
 
 \section{Getting Started}
-\ty{Epos2plot} is written in Go and distributed under Git.
+\ty{Epos2plot} is written in Go and distributed via github.
 \begin{itemize}
 \item Obtain the program
 \begin{verbatim}
@@ -99,25 +99,28 @@ converted to site frequency spectra by
 \ty{ms2sfs}\footnote{\ty{https://github.com/evolbioinf/sfs/}}. \ty{Epos}\footnote{\ty{https://github.com/evolbioinf/epos/}},
 finally, estimates population sizes from these spectra.
 \begin{itemize}
-\item Uncompress the example data
+\item Get the precomputed example data, uncompress it, and move it into the
+  \texttt{data} directory
 \begin{verbatim}
-bunzip data/example.epos.bz2
+wget guanine.evolbio.mpg.de/epos2plot/example.epos.bz
+bunzip2 example.epos.bz2 
+mv example.epos data/
 \end{verbatim}
 \item Look at the first sample, which happens to occupy 11 lines in
   the uncompressed data file:
 \begin{verbatim}
 head -n 11 data/example.epos 
-#InputFile:	stdin
-#Polymorphic sites surveyed:	19114
-#Monomorphic sites surveyed:	9980886
-#m = 1; maximum Log(Likelihood): 150988352.649665	{2}
-#m = 2; maximum Log(Likelihood): 150988355.097023	{2, 3}
-#m = 3; maximum Log(Likelihood): 150988356.149583	{2, 3, 30}
-#Final Log(Likelihood):          150988355.097023
-#d^2:                              0.00524357
+#InputFile: stdin
+#Polymorphic sites surveyed:      18966
+#Monomorphic sites surveyed:    9981034
+#m = 1; maximum Log(Likelihood):    -159.489374 {2}
+#m = 2; maximum Log(Likelihood):    -156.442818 {2,3}
+#m = 3; maximum Log(Likelihood):    -156.330973 {2,3,11}
+#Final Log(Likelihood):             -156.442818
+#d^2: 0.00352383
 #Level	T[Level]	N[Level]
-3	1.85e+04	9.90e+03
-2	3.94e+04	1.05e+04
+3	1.83e+04	9.80e+03
+2	3.93e+04	1.05e+04
 \end{verbatim}
 The part that concerns us here are the two lines without
 leading hashes at the bottom. We read them from the bottom up, which means going
@@ -131,15 +134,15 @@ when $N=9900$, which remained unchanged until the present.
   it is easier to extract it automatically into two columns, time and size
 \begin{verbatim}
 head -n 11 data/example.epos | epos2plot -r
-0       9900
-18500   9900
-18500   10500
-39400   10500
+0	9800
+18300	9800
+18300	10500
+39300	10500
 \end{verbatim}
 \item and plot it using \ty{pipePlot}\footnote{\ty{http://github.com/evolbioinf/pipeplot}}
 \begin{verbatim}
 head -n 11 data/example.epos | 
-epos2plot -r            | 
+epos2plot -r                 | 
 pipePlot -x "Time (generations)" -y N -X 0:45000 -Y 9000:11000
 \end{verbatim}
 to get Figure~\ref{fig:sin}.
@@ -189,16 +192,16 @@ sample into the past until the last sample has coalesced.
   median:
 \begin{verbatim}
 epos2plot data/example.epos | head
-#Time   LowerQ  Median  UpperQ
-0       1       10000   83900
-0.0046  1       10000   83900
-0.00952 1       10000   83900
-0.0148  283     10100   83900
-0.0205  469     10100   83900
-0.0267  558     10100   83900
-0.0485  574     10100   83900
-0.166   577     10100   84300
-1.04    639     10100   84300
+#Time   LowerQ	Median	UpperQ
+0       1       10000   76900
+0.0046  1       10000   76900
+0.0046  1       10000   76900
+0.00952 1       10000   76900
+0.00952 544     10100   76900
+0.0148  544     10100   76900
+0.0148  1000    10100   76900
+0.0205  1000    10100   76900
+0.0205  1090    10100   76900
 \end{verbatim}
 where \ty{Time} contains the time in generations, \ty{LowerQ} the
 lower quantile of the population size, \ty{Median} its median, and
@@ -211,28 +214,26 @@ lower quantile of the population size, \ty{Median} its median, and
   \ty{-t} option. By default this is 0, but if we now set it to 1, we
   get
 \begin{verbatim}
-epos2plot -t 1 | head
-#Time	LowerQ	Median	UpperQ
-0	1	10000	83900
-1.04	639	10100	84300
-2.08	917	10100	85400
-3.22	1270	10100	85400
-4.47	1510	10100	85400
-6.09	1680	10100	85400
-7.72	1720	10100	85400
-8.91	2040	10100	85400
-10.2	2320	10100	85400
+epos2plot -t 1 data/example.epos | head
+#Time   LowerQ	Median	UpperQ
+0       1       10000   76900
+1.4     1140    10100   76900
+1.4     1260    10100   76900
+2.4     1260    10100   76900
+2.4     1280    10100   76900
+4.03    1280    10100   76900
+4.03    1340    10100   76900
+5.18    1340    10100   76900
+5.18    1370    10100   76900
 \end{verbatim}
-Notice how the last time point printed in the previous example is now
-the fist time point after zero. The \ty{-t} option is particularly
-useful with very large samples of \ty{epos} results, where the number
-of data points close to the zero line can be so large as to bog down
-the \ty{epos2plot} run.  In any case, the plot of these values is
-Figure~\ref{fig:qua}, which we already looked at in the
-Introduction. It illustrates the excellent fit between the predicted
-and the expected population size.
+The \ty{-t} option is particularly useful with very large samples of
+\ty{epos} results, where the number of data points close to the zero
+line can be so large as to bog down the \ty{epos2plot} run.  In any
+case, the plot of these values is Figure~\ref{fig:qua}, which we
+already looked at in the Introduction. It illustrates the excellent
+fit between the predicted and the expected population size.
 \end{itemize}
-\subsection{\ty{sumPlot}}
+\subsection{\ty{plotSum}}
 Often several samples are taken from a given population. For example,
 Figure~\ref{fig:chq}A shows the medians of eight bootstrapted samples
 drawn from the Chq population of \textit{Daphnia

@@ -10,7 +10,6 @@ genFig.sh
 doc/fig2a.eps
 doc/fig2a.tex
 doc/epos2plot.out
-epos2plot.pdf
 epos2plot.ps
 cmd/epos2plot/epos2plot
 cmd/plotSum/plotSum
